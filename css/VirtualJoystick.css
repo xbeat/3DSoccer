@@ -1,0 +1,330 @@
+body {
+  margin: 0px;
+  overflow: hidden;
+}
+
+.st1 {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-miterlimit: 10;
+}
+
+li {
+  list-style-type: none;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+p {
+  text-transform: uppercase;
+  font-family: Arial;
+  font-size: 10.5px;
+  margin: 0px;
+  text-align: center;
+  font-weight: 800;
+}
+
+.title h5 {
+  margin: 0px;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-family: Arial;
+  font-size: 1.5em;
+  margin: 0 auto;
+  color: #CAA8F5;
+  border-bottom: 3px solid #230C33;
+}
+
+.menu-container {
+  position: absolute;
+  height: 100vh;
+}
+
+.nav-toggle {
+  position: absolute;
+  left: 15px;
+  top: 20px;
+  width: 500px;
+  z-index: 1000;
+  cursor: pointer;
+}
+.nav-toggle.hamburger {
+  width: 35px;
+  height: 35px;
+}
+
+.nav-toggle.hamburger:hover {
+  cursor: pointer;
+}
+
+.nav-toggle.hamburger span {
+  width: 30px;
+  height: 2px;
+  background-color: #4e4e4e;
+  display: block;
+  margin: 5px auto;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-toggle.hamburger.open span:nth-child(1) {
+  width: 20px;
+  -webkit-transform: translateX(-10px) rotate(-45deg);
+          transform: translateX(-10px) rotate(-45deg);
+}
+
+.nav-toggle.hamburger.hamburger.open span:nth-child(3) {
+  width: 20px;
+  -webkit-transform: translateX(-10px) rotate(45deg);
+          transform: translateX(-10px) rotate(45deg);
+}
+
+nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  -webkit-transform: translate3d(-100%, 0, 0);
+          transform: translate3d(-100%, 0, 0);
+  -webkit-transition: all .25s ease-out;
+  transition: all .25s ease-out;
+  background: rgba(35, 12, 51, 0.5);
+  padding-top: 35px;
+  height: 100%;
+  width: 250px;
+}
+
+.nav-open nav {
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+  -webkit-transition: all .4s ease;
+  transition: all .4s ease;
+}
+
+ul {
+  padding: 0px;
+}
+
+ul button {
+  width: 80%;
+  padding: 10px 0px;
+  background: transparent;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  border: 2px solid #230C33;
+  color: #230C33;
+}
+
+ul button:hover {
+  cursor: pointer;
+  border: 2px solid hotpink;
+  color: #CAA8F5;
+}
+
+ul .active button {
+  color: #CAA8F5;
+  border: 2px solid hotpink;
+}
+
+ul li a {
+  color: #230C33;
+  -webkit-transition: all 1.5s;
+  -webkit-transition: all .5s;
+  transition: all .5s;
+}
+
+ul li svg {
+  stroke: #230C33;
+  width: 45px;
+  display: block;
+  margin: 0 auto;
+  fill: transparent;
+  stroke-width: 2.5px;
+  -webkit-transition: all .25s;
+  transition: all .25s;
+}
+
+ul li:hover a {
+  color: #CAA8F5;
+  -webkit-transition: all .25s;
+  transition: all .25s;
+}
+
+ul li:hover svg {
+  stroke: #FFF;
+  -webkit-transform: translateY(-10px);
+          transform: translateY(-10px);
+  -webkit-transition: all .25s;
+  transition: all .25s;
+}
+
+ul li .toggle.selected {
+  color: #CAA8F5;
+}
+
+ul li .toggle.selected svg {
+  stroke: #FFF;
+  -webkit-transform: translateY(-10px);
+          transform: translateY(-10px);
+}
+
+ul.container-controls {
+  width: 200px;
+  margin: 0 auto;
+  padding: 25px 0px 0px 0px;
+}
+
+ul.container-controls li {
+  width: 60px;
+  display: inline-block;
+}
+
+ul.object-controls {
+  width: 100%;
+  display: block;
+  float: left;
+  margin-top: 0px;
+}
+
+ul.object-controls li {
+  width: 50%;
+  float: left;
+  text-align: center;
+  padding: 5px 0px;
+}
+
+ul.object-controls a.object > p {
+  margin: 0px;
+}
+
+ul.create-objects li {
+  width: 50%;
+  float: left;
+  padding: 10px 0px;
+}
+
+
+/* Joystick */
+#joystick1 {
+	bottom: 30px;
+	left: 30px;
+}
+
+#joystick2 {
+	bottom: 30px;
+	right: 30px;
+}
+
+#button1 {
+	bottom: 240px;
+	right: 30px;
+}
+
+#button2 {
+	bottom: 240px;
+	right: 120px;
+}
+
+.virtualInput-joystick__frame {
+	opacity: .5;
+}
+
+.virtualInput-joystick__button {
+	border: 1px solid #333;
+	background: rgba( 255, 255, 255, .5);
+}
+
+.virtualInput-joystick__arrowUp,
+.virtualInput-joystick__arrowRight,
+.virtualInput-joystick__arrowDown,
+.virtualInput-joystick__arrowLeft {
+	fill: #fff;
+}
+
+.virtualInput-joystick__circle {
+	fill: none;
+	stroke: #fff;
+}
+
+.virtualInput-button {
+	border: 1px solid #333;
+	background: rgba( 255, 255, 255, .5);
+}
+
+.virtualInput-joystick {
+	position: absolute;
+}
+
+.virtualInput-joystick__frame {
+	position: absolute;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+	opacity: .5;
+}
+
+.virtualInput-joystick__button {
+	cursor: pointer;
+	position: absolute;
+	box-sizing: border-box;
+	border-radius: 50%;
+	border: 1px solid #333;
+	background: rgba( 255, 255, 255, .5);
+}
+
+.virtualInput-joystick__arrowUp,
+.virtualInput-joystick__arrowRight,
+.virtualInput-joystick__arrowDown,
+.virtualInput-joystick__arrowLeft {
+	fill: #fff;
+}
+
+.virtualInput-joystick__circle {
+	fill: none;
+	stroke: #fff;
+}
+
+
+.virtualInput-button {
+	text-align: center;
+	cursor: pointer;
+	position: absolute;
+	box-sizing: border-box;
+	display: table;
+	border: 1px solid #333;
+	border-radius: 50%;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background: rgba( 255, 255, 255, .5);
+}
+
+.virtualInput-button__inner {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+
+
+/*
+.virtualInput-squareButton{
+text-align: center;
+cursor: pointer;
+position: absolute;
+box-sizing: border-box;
+display: table;
+border: 1px solid #333;
+border-radius: 3px;
+background: rgba( 255, 255, 255, .5 );
+}
+.virtualInput-squareButton__inner{
+display: table-cell;
+vertical-align: middle;
+}
+*/
