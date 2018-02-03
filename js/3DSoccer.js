@@ -161,6 +161,11 @@ class Soccer3D{
 
 		activateAllActions();
 		this.characterController = new CharacterController( this.mesh );
+
+		window.addEventListener( 'keydown', this.characterController.onKeyDown.bind( this.characterController ), false );
+		window.addEventListener( 'keyup', this.characterController.onKeyUp.bind( this.characterController ), false );
+		window.addEventListener( 'change-duration', this.characterController.onDurationChange.bind( this.characterController ), false );
+
 		this.render();
 
 	};

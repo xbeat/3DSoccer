@@ -68,29 +68,24 @@ p {
   background-color: #4e4e4e;
   display: block;
   margin: 5px auto;
-  -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
 
 .nav-toggle.hamburger.open span:nth-child(1) {
   width: 20px;
-  -webkit-transform: translateX(-10px) rotate(-45deg);
-          transform: translateX(-10px) rotate(-45deg);
+  transform: translateX(-10px) rotate(-45deg);
 }
 
 .nav-toggle.hamburger.hamburger.open span:nth-child(3) {
   width: 20px;
-  -webkit-transform: translateX(-10px) rotate(45deg);
-          transform: translateX(-10px) rotate(45deg);
+  transform: translateX(-10px) rotate(45deg);
 }
 
 nav {
   position: fixed;
   left: 0;
   top: 0;
-  -webkit-transform: translate3d(-100%, 0, 0);
-          transform: translate3d(-100%, 0, 0);
-  -webkit-transition: all .25s ease-out;
+  transform: translate3d(-100%, 0, 0);
   transition: all .25s ease-out;
   background: rgba(35, 12, 51, 0.5);
   padding-top: 35px;
@@ -99,9 +94,7 @@ nav {
 }
 
 .nav-open nav {
-  -webkit-transform: translate3d(0, 0, 0);
-          transform: translate3d(0, 0, 0);
-  -webkit-transition: all .4s ease;
+  transform: translate3d(0, 0, 0);
   transition: all .4s ease;
 }
 
@@ -145,21 +138,17 @@ ul li svg {
   margin: 0 auto;
   fill: transparent;
   stroke-width: 2.5px;
-  -webkit-transition: all .25s;
   transition: all .25s;
 }
 
 ul li:hover a {
   color: #CAA8F5;
-  -webkit-transition: all .25s;
   transition: all .25s;
 }
 
 ul li:hover svg {
   stroke: #FFF;
-  -webkit-transform: translateY(-10px);
-          transform: translateY(-10px);
-  -webkit-transition: all .25s;
+  transform: translateY(-10px);
   transition: all .25s;
 }
 
@@ -169,10 +158,12 @@ ul li .toggle.selected {
 
 ul li .toggle.selected svg {
   stroke: #FFF;
-  -webkit-transform: translateY(-10px);
-          transform: translateY(-10px);
+  transform: translateY(-10px);
 }
 
+/* ---------------- 
+ * Control Panel 
+ */
 ul.container-controls {
   width: 200px;
   margin: 0 auto;
@@ -208,8 +199,9 @@ ul.create-objects li {
   padding: 10px 0px;
 }
 
-
-/* Joystick */
+/* ---------------- 
+ * Joystick 
+ */
 #joystick1 {
 	bottom: 30px;
 	left: 30px;
@@ -230,13 +222,13 @@ ul.create-objects li {
 	right: 120px;
 }
 
-.virtualInput-joystick__frame {
-	opacity: .5;
+#button3 {
+  bottom: 320px;
+  right: 30px;
 }
 
-.virtualInput-joystick__button {
-	border: 1px solid #333;
-	background: rgba( 255, 255, 255, .5);
+.virtualInput-joystick__frame {
+	opacity: .5;
 }
 
 .virtualInput-joystick__arrowUp,
@@ -249,11 +241,6 @@ ul.create-objects li {
 .virtualInput-joystick__circle {
 	fill: none;
 	stroke: #fff;
-}
-
-.virtualInput-button {
-	border: 1px solid #333;
-	background: rgba( 255, 255, 255, .5);
 }
 
 .virtualInput-joystick {
@@ -273,22 +260,13 @@ ul.create-objects li {
 	position: absolute;
 	box-sizing: border-box;
 	border-radius: 50%;
-	border: 1px solid #333;
 	background: rgba( 255, 255, 255, .5);
+  /* prevent dat-gui from being selected */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
-
-.virtualInput-joystick__arrowUp,
-.virtualInput-joystick__arrowRight,
-.virtualInput-joystick__arrowDown,
-.virtualInput-joystick__arrowLeft {
-	fill: #fff;
-}
-
-.virtualInput-joystick__circle {
-	fill: none;
-	stroke: #fff;
-}
-
 
 .virtualInput-button {
 	text-align: center;
@@ -296,35 +274,17 @@ ul.create-objects li {
 	position: absolute;
 	box-sizing: border-box;
 	display: table;
-	border: 1px solid #333;
 	border-radius: 50%;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
-	background: rgba( 255, 255, 255, .5);
+  background: rgba( 255, 255, 255, .5);
+  /* prevent dat-gui from being selected */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .virtualInput-button__inner {
 	display: table-cell;
 	vertical-align: middle;
 }
-
-
-
-/*
-.virtualInput-squareButton{
-text-align: center;
-cursor: pointer;
-position: absolute;
-box-sizing: border-box;
-display: table;
-border: 1px solid #333;
-border-radius: 3px;
-background: rgba( 255, 255, 255, .5 );
-}
-.virtualInput-squareButton__inner{
-display: table-cell;
-vertical-align: middle;
-}
-*/
