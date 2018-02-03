@@ -72,7 +72,7 @@ var EasingFunctions = {
 /**
 * Tween
 */
-function tween(values, options) {
+function tween( values, options ) {
 	// Methods & Properties
 	var onComplete = options.onComplete;
 	var onUpdate = options.onUpdate;
@@ -106,25 +106,19 @@ function tween(values, options) {
 		var fromY = values.from.y;
 		var toY = values.to.y;
 
-	}
+	};
 	
-	Math.lerp = function(min, max, amount) {
-		return min + amount * (max - min);
-	}
+	Math.lerp = function( min, max, amount ) {
+		return min + amount * ( max - min );
+	};
 	
 	// Create & run animation function
 	var animation = function animation() {
 		var now = Date.now();
-		var t = duration > 0 ? (now - start) / duration : 1;
-		var progress = ease(t);
+		var t = duration > 0 ? ( now - start ) / duration : 1;
+		var progress = ease( t );
 
 		if( values.action == "camera3D" ){
-			//values.position.x = fromX + progress * (toX - fromX); //linear interpolation
-			//values.position.y = fromY + progress * (toY - fromY); //linear interpolation
-			//values.position.z = fromX + progress * (toX - fromX); //linear interpolation
-			//values.rotation.y = fromY + progress * (toY - fromY); //linear interpolation
-			//values.rotation.x = fromX + progress * (toX - fromX); //linear interpolation
-			//values.rotation.y = fromY + progress * (toY - fromY); //linear interpolation
 
 			values.position.x = Math.lerp( values.cameraStart.position.x, values.cameraEnd.position.x / 20, progress );
 			values.position.y = Math.lerp( values.cameraStart.position.y, values.cameraEnd.position.y / 20, progress );
@@ -132,30 +126,27 @@ function tween(values, options) {
 			values.rotation.x = Math.lerp( values.cameraStart.rotation.x, values.cameraEnd.rotation.x, progress );
 			values.rotation.y = Math.lerp( values.cameraStart.rotation.y, values.cameraEnd.rotation.y, progress );
 			values.rotation.z = Math.lerp( values.cameraStart.rotation.z, values.cameraEnd.rotation.z, progress );		
-
-			console.log(values.position.x);
-			
-		}else{
+		
+		} else {
 			
 			values.progress.x = fromX + progress * (toX - fromX); //linear interpolation
 			values.progress.y = fromY + progress * (toY - fromY); //linear interpolation
 			
-		}
+		};
 		
 		// If complete
-		if (t >= 1) {
-			onUpdate(values);
-			onComplete(values);
+		if ( t >= 1 ) {
+			onUpdate( values );
+			onComplete( values );
 			return values;
 		} else {
 			// Run update callback and loop until finished
-			onUpdate(values);
-			requestAnimationFrame(animation);
-		}
+			onUpdate( values );
+			requestAnimationFrame( animation );
+		};
 	};
 	animation();
-}
-
+};
 
 document.querySelector('#clearBtn').addEventListener('click', function() {
 	if (document.querySelector(".virtualInput-joystick").style.visibility == "hidden") {
@@ -168,7 +159,7 @@ document.querySelector('#clearBtn').addEventListener('click', function() {
 		document.querySelectorAll(".virtualInput-joystick")[1].style.visibility = "hidden";	
 		document.querySelectorAll(".virtualInput-button")[0].style.visibility = "hidden";
 		document.querySelectorAll(".virtualInput-button")[1].style.visibility = "hidden";
-	}
+	};
 });
 
 /////////////////////////
@@ -225,6 +216,7 @@ var cameraPresets = [
     }
   }
 ];
+
 var heavenPreset = {
   position: {
     x: -340.39172412110474,
@@ -241,7 +233,7 @@ var heavenPreset = {
 var cameraTarget;
 //tween camera
 var cameraPosition = {
-  tweenCamera: function(cameraPresets) {
+  tweenCamera: function( cameraPresets ) {
 		var preset = {};
 		preset.duration = 1000;
 		preset.cameraStart = {
@@ -249,55 +241,60 @@ var cameraPosition = {
 			rotation: new THREE.Vector3(),
 			fov: 0
 		};
-    preset.cameraStart.position.copy(camera.position);
-    preset.cameraStart.rotation.copy(camera.rotation);
-		preset.cameraStart.fov = camera.fov;
+
+	    preset.cameraStart.position.copy( soccer3D.camera.position );
+    	preset.cameraStart.rotation.copy( soccer3D.camera.rotation );
+		preset.cameraStart.fov = soccer3D.camera.fov;
 		preset.action = "camera3D";
 		preset.cameraEnd = cameraPresets;
+		
 		preset.position = {
 			x: 0,				
 			y: 0,
 			z: 0
 		};
+		
 		preset.rotation = {
 			x: 0,
 			y: 0,
 			z: 0
 		};
-		tween(preset, {
-			onUpdate: function onUpdate(values) {
-        camera.position.x = values.position.x;				
-        camera.position.y = values.position.y;
-				camera.position.z = values.position.z;
-				camera.rotation.x = values.rotation.x;
-				camera.rotation.y = values.rotation.y;
-				camera.rotation.z = values.rotation.z;						
+		
+		tween( preset, {
+			onUpdate: function onUpdate( values ) {
+        		soccer3D.camera.position.x = values.position.x;				
+        		soccer3D.camera.position.y = values.position.y;
+				soccer3D.camera.position.z = values.position.z;
+				soccer3D.camera.rotation.x = values.rotation.x;
+				soccer3D.camera.rotation.y = values.rotation.y;
+				soccer3D.camera.rotation.z = values.rotation.z;						
 			},
 			onComplete: function onComplete() {
 				console.log("complete");
 			},
 			ease: EasingFunctions.easeOutCubic
 		});
-  },
-  applyCamera: function(preset) {
-    camera.position.copy(preset.position);
-    camera.lookAt( new THREE.Vector3(0,0,0) );
-  }
+	},
+
+	applyCamera: function( preset ) {
+		soccer3D.camera.position.copy( preset.position );
+		soccer3D.camera.lookAt( new THREE.Vector3( 0,0,0 ) );
+	}
 };
 
-var presetButton = document.getElementById("camera-presets").getElementsByTagName("li");
-presetButton[0].addEventListener("click", function() {
-  cameraPosition.tweenCamera(cameraPresets[0]);
-}, false);
-presetButton[1].addEventListener("click", function() {
-  cameraPosition.tweenCamera(cameraPresets[1]);
-}, false);
-presetButton[2].addEventListener("click", function() {
-  cameraPosition.tweenCamera(cameraPresets[2]);
-}, false);
-presetButton[3].addEventListener("click", function() {
-  cameraPosition.tweenCamera(cameraPresets[3]);
-}, false);
-presetButton[4].addEventListener("click", function() {
-  cameraPosition.applyCamera(heavenPreset);
-}, false);
+let presetButton = document.getElementById("camera-presets").getElementsByTagName("li");
+presetButton[0].addEventListener( "click", function() {
+  cameraPosition.tweenCamera( cameraPresets[0] );
+}, false );
+presetButton[1].addEventListener( "click", function() {
+  cameraPosition.tweenCamera( cameraPresets[1] );
+}, false );
+presetButton[2].addEventListener( "click", function() {
+  cameraPosition.tweenCamera( cameraPresets[2] );
+}, false );
+presetButton[3].addEventListener( "click", function() {
+  cameraPosition.tweenCamera( cameraPresets[3] );
+}, false );
+presetButton[4].addEventListener( "click", function() {
+  cameraPosition.applyCamera( heavenPreset );
+}, false );

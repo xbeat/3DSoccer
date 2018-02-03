@@ -1,13 +1,13 @@
 //////////////////////////////
 // Main
 
-document.querySelector('.nav-toggle').addEventListener("click", function(e){
+document.querySelector('.nav-toggle').addEventListener( "click", function(e){
   e.currentTarget.classList.toggle('open');
   document.querySelector('.menu-container').classList.toggle('nav-open');
 });
 
 //toggle button styles
-document.querySelector('.toggle').addEventListener("click", function(e){
+document.querySelector('.toggle').addEventListener( "click", function(e){
   document.querySelector('.selected').classList.remove('selected');
   e.currentTarget.classList.add('selected');
 });
@@ -378,31 +378,31 @@ var quadrant = 0;
 
 function updateView(){
   var currentDirX = "", currentDirY = "";
-  if (quadrant === 0) return;
-  if (quadrant > 4.750 || quadrant <= 1.250) { currentDirX = "right"; currentDirY = "";	}			
-  if (quadrant > 1.250 && quadrant <= 1.750) { currentDirX = "right"; currentDirY = "up"; }	
-  if (quadrant > 1.750 && quadrant <= 2.250) { currentDirX = ""; currentDirY = "up";	}
-  if (quadrant > 2.250 && quadrant <= 2.750) { currentDirX = "left"; currentDirY = "up";	}	
-  if (quadrant > 2.750 && quadrant <= 3.250) { currentDirX = "left"; currentDirY = "";	}	
-  if (quadrant > 3.250 && quadrant <= 3.750) { currentDirX = "left"; currentDirY = "down"; }	
-  if (quadrant > 3.750 && quadrant <= 4.250) { currentDirX = ""; currentDirY = "down"; }
-  if (quadrant > 4.250 && quadrant <= 4.750) { currentDirX = "right"; currentDirY = "down"; }
+  if ( quadrant === 0) return;
+  if ( quadrant > 4.750 || quadrant <= 1.250 ) { currentDirX = "right"; currentDirY = "";	}			
+  if ( quadrant > 1.250 && quadrant <= 1.750 ) { currentDirX = "right"; currentDirY = "up"; }	
+  if ( quadrant > 1.750 && quadrant <= 2.250 ) { currentDirX = ""; currentDirY = "up";	}
+  if ( quadrant > 2.250 && quadrant <= 2.750 ) { currentDirX = "left"; currentDirY = "up";	}	
+  if ( quadrant > 2.750 && quadrant <= 3.250 ) { currentDirX = "left"; currentDirY = "";	}	
+  if ( quadrant > 3.250 && quadrant <= 3.750 ) { currentDirX = "left"; currentDirY = "down"; }	
+  if ( quadrant > 3.750 && quadrant <= 4.250 ) { currentDirX = ""; currentDirY = "down"; }
+  if ( quadrant > 4.250 && quadrant <= 4.750 ) { currentDirX = "right"; currentDirY = "down"; }
 
   if (currentDirX === "left") {
     cameraStart = cameraStart - 4;
-    camera.position.setZ(cameraStart);
+    soccer3D.camera.position.setZ(cameraStart);
     //pointLight.position.setZ(cameraStart);
   } else if (currentDirX === "right") {
     cameraStart += 4;
-    camera.position.setZ(cameraStart);
+    soccer3D.camera.position.setZ(cameraStart);
   }
   if (currentDirY === "up") {
     rotate -= 0.04;
-    scene.rotation.y = rotate;
+    soccer3D.scene.rotation.y = rotate;
     //pointLight.rotation.y = rotate;
   } else if (currentDirY === "down") {
     rotate += 0.04;
-    scene.rotation.y = rotate;
+    soccer3D.scene.rotation.y = rotate;
   };
 
 };
@@ -413,7 +413,6 @@ function radToDeg(rad) {
   angle %= 360.0; // [0..360) if angle is positive, (-360..0] if negative
   if ( angle < 0 ) angle += 360.0; // Back to [0..360)
   quadrant = ( angle/90 ) % 4 + 1; // Quadrant
-  console.log( quadrant + "quad" );	
   return angle;
 };
 
