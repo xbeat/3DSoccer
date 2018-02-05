@@ -1,7 +1,46 @@
 body {
+  color: #fff;
+  font-family: Monospace;
+  font-size: 13px;
+  text-align: center;
+  background-color: #fff;
   margin: 0px;
   overflow: hidden;
 }
+
+#info {
+  position: absolute;
+  top: 0px; 
+  width: 100%;
+  padding: 5px;
+}
+
+#data {
+  position: absolute;
+  top: 80px;
+  width: 100%;
+  padding: 5px;
+}
+
+a {
+  color: #bbb;
+}
+
+.ac {  /* prevent dat-gui from being selected */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.no-pointer-events {
+  pointer-events: none;
+}
+
+.control-disabled {
+  color: #888;
+  text-decoration: line-through;
+}   
 
 .st1 {
   fill: none;
@@ -53,6 +92,7 @@ p {
   z-index: 1000;
   cursor: pointer;
 }
+
 .nav-toggle.hamburger {
   width: 35px;
   height: 35px;
@@ -141,6 +181,14 @@ ul li svg {
   transition: all .25s;
 }
 
+ul li svg path {
+  fill: #fff;
+}
+
+ul li svg path:hover{
+  fill:#f00;
+} 
+
 ul li:hover a {
   color: #CAA8F5;
   transition: all .25s;
@@ -161,7 +209,7 @@ ul li .toggle.selected svg {
   transform: translateY(-10px);
 }
 
-/* ---------------- 
+/* 
  * Control Panel 
  */
 ul.container-controls {
@@ -199,7 +247,7 @@ ul.create-objects li {
   padding: 10px 0px;
 }
 
-/* ---------------- 
+/* 
  * Joystick 
  */
 #joystick1 {
