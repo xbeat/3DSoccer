@@ -170,6 +170,28 @@ class Soccer3D{
 
 	};
 
+	deepClone( initalObj, finalObj = {} ) {
+		var obj = finalObj;
+		for ( var i in initalObj ) {
+		    var prop = initalObj[i];
+
+		    if( prop === obj ) {
+		        continue;
+		    };
+
+		    if ( typeof prop === 'object' ) {
+		        if( prop.constructor === Array ) {
+		            obj[i] = deepClone( prop, [] );
+		        } else {
+		            obj[i] = Object.create( prop );
+		        };
+		    } else {
+		        obj[i] = prop;
+		    };
+		};
+		return obj;
+	};
+
 	// render
  	render() {
 
