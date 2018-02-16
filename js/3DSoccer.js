@@ -120,6 +120,24 @@ class Soccer3D{
 		skyMesh.renderDepth = -10;
 		this.scene.add( skyMesh );
 
+
+		//Soccer Ball
+     	let buffgeoSphere = new THREE.BufferGeometry();
+        buffgeoSphere.fromGeometry( new THREE.SphereGeometry( 1, 20, 10 ) );
+	    let ballTexture = THREE.ImageUtils.loadTexture('models/ball/ball.png');			        
+        var ballMaterial = new THREE.MeshLambertMaterial({ 
+            color: 0xffffff, 
+            map: ballTexture
+        });
+        
+        let ballMesh = new THREE.Mesh( buffgeoSphere, ballMaterial );
+        let w = 10 + Math.random()*10; //???
+        ballMesh.scale.set( w/2, w/2, w/2 );
+        
+        ballMesh.castShadow = true;
+		//meshs[i].receiveShadow = true;
+		this.scene.add( ballMesh );       
+
 	};
 
 	// add player
