@@ -3,7 +3,8 @@
 		<title>3DSoccer xbe.at 1.0.1</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" type="text/css" media="screen,print" href="css/3DSoccer.css" />
+		<link rel="stylesheet" type="text/css" media="screen,print" href="css/Scene3D.css" />
+		<link rel="stylesheet" type="text/css" media="screen,print" href="css/virtualInput.css" />
 		<!-- original position: /build/OrbitControls.js -->
 		<script src="js/three.js"></script>
 		<!-- original position: /examples/js/controls/OrbitControls.js -->
@@ -12,6 +13,7 @@
 		<script src="js/dat.gui.min.js"></script>		
 		<script src="js/CharacterController.js"></script>
 		<script src="js/ControlPanel.js"></script>
+
 	</head>
 	<body>
 		<div id="container"></div>
@@ -21,6 +23,18 @@
 			<br><br>Note: crossfades are possible with blend weights being set to (1,0,0), (0,1,0) or (0,0,1)
 		</div>
 		<div id="data">****</div>
+
+		<div id="camera-presets">
+		  <div class="container">
+		    <div class="preset-button">1</div>
+		    <div class="preset-button">2</div>
+		    <div class="preset-button">3</div>
+		    <div class="preset-button">4</div>
+		    <div class="preset-button">5</div>
+		    <div class="preset-button">6</div>
+		    <div class="preset-button">F</div>
+		  </div>
+		</div>
 
 		<div class="nav-toggle open hamburger">
 		  <span></span>
@@ -34,69 +48,51 @@
 		      <div class="title">
 		        <h5>xbe.at</h5>
 		      </div>
-		      <ul class="container-controls">
-
-		
-		        <li>
-		          <a id="pyramid" class="toggle">
-
-		          </a>
-		        </li>
-		
-		      </ul>
 		    </div>
 		
-		    <ul class="action-controls">
-		      <li><a id="animateBtn" onClick="pause()" class="btn"><button><p>Stop RAF</p></button></a></li>
-		      <li><a id="clearBtn" class="btn"><button><p>Close Joystick</p></button></a></li>
-		    </ul>
-		
-		    <ul class="create-objects" id="camera-presets">
-		      <li>
-		        <a id="Camera1" class="btn object">
-					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
-						<path d="M934.5,179.9c-12.2,0-23.9,3.9-33.7,11.2L688.6,349.4V243.1c0-27-19.7-48.9-43.9-48.9H53.9C29.7,194.1,10,216,10,243.1V757c0,27,19.7,48.9,43.9,48.9h590.8c24.2,0,43.9-21.9,43.9-48.9V650.6l212.2,158.3c9.8,7.3,21.5,11.2,33.7,11.2c30.6,0,55.5-24,55.5-53.4V233.3C990,203.8,965.1,179.9,934.5,179.9z M936.8,766.3c-0.4,0.3-1.3,0.7-2.3,0.7c-0.9,0-1.5-0.3-1.9-0.6L635.4,544.5v177.2l0,12.6c0,13.1-9.3,11.2-20.8,11.2H84c-11.5,0-20.8-10.6-20.8-23.7V275.2c0-13.1,9.3-23.7,17-23.7h530.6c15.2,0,24.5,10.6,24.5,23.7v180.3l297.2-221.8c0.4-0.3,1-0.6,1.9-0.6c1,0,1.8,0.4,2.3,0.7V766.3z"/>
-					</svg>
-					<p>Camera 1</p>
-		        </a>
-		      </li>
-		      <li>
-		        <a id="Camera2" class="btn object">
-					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
-						<path d="M934.5,179.9c-12.2,0-23.9,3.9-33.7,11.2L688.6,349.4V243.1c0-27-19.7-48.9-43.9-48.9H53.9C29.7,194.1,10,216,10,243.1V757c0,27,19.7,48.9,43.9,48.9h590.8c24.2,0,43.9-21.9,43.9-48.9V650.6l212.2,158.3c9.8,7.3,21.5,11.2,33.7,11.2c30.6,0,55.5-24,55.5-53.4V233.3C990,203.8,965.1,179.9,934.5,179.9z M936.8,766.3c-0.4,0.3-1.3,0.7-2.3,0.7c-0.9,0-1.5-0.3-1.9-0.6L635.4,544.5v177.2l0,12.6c0,13.1-9.3,11.2-20.8,11.2H84c-11.5,0-20.8-10.6-20.8-23.7V275.2c0-13.1,9.3-23.7,17-23.7h530.6c15.2,0,24.5,10.6,24.5,23.7v180.3l297.2-221.8c0.4-0.3,1-0.6,1.9-0.6c1,0,1.8,0.4,2.3,0.7V766.3z"/>
-					</svg>
-					<p>Camera 2</p>
-		        </a>
-		      </li>
-		      <li>
-		        <a id="Camera3" class="btn object">
-					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
-						<path d="M934.5,179.9c-12.2,0-23.9,3.9-33.7,11.2L688.6,349.4V243.1c0-27-19.7-48.9-43.9-48.9H53.9C29.7,194.1,10,216,10,243.1V757c0,27,19.7,48.9,43.9,48.9h590.8c24.2,0,43.9-21.9,43.9-48.9V650.6l212.2,158.3c9.8,7.3,21.5,11.2,33.7,11.2c30.6,0,55.5-24,55.5-53.4V233.3C990,203.8,965.1,179.9,934.5,179.9z M936.8,766.3c-0.4,0.3-1.3,0.7-2.3,0.7c-0.9,0-1.5-0.3-1.9-0.6L635.4,544.5v177.2l0,12.6c0,13.1-9.3,11.2-20.8,11.2H84c-11.5,0-20.8-10.6-20.8-23.7V275.2c0-13.1,9.3-23.7,17-23.7h530.6c15.2,0,24.5,10.6,24.5,23.7v180.3l297.2-221.8c0.4-0.3,1-0.6,1.9-0.6c1,0,1.8,0.4,2.3,0.7V766.3z"/>
-					</svg>	          
-					<p>Camera 3</p>
-		        </a>
-		      </li>
-		      <li>
-		        <a id="Camera4" class="btn object">
-					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
-						<path d="M934.5,179.9c-12.2,0-23.9,3.9-33.7,11.2L688.6,349.4V243.1c0-27-19.7-48.9-43.9-48.9H53.9C29.7,194.1,10,216,10,243.1V757c0,27,19.7,48.9,43.9,48.9h590.8c24.2,0,43.9-21.9,43.9-48.9V650.6l212.2,158.3c9.8,7.3,21.5,11.2,33.7,11.2c30.6,0,55.5-24,55.5-53.4V233.3C990,203.8,965.1,179.9,934.5,179.9z M936.8,766.3c-0.4,0.3-1.3,0.7-2.3,0.7c-0.9,0-1.5-0.3-1.9-0.6L635.4,544.5v177.2l0,12.6c0,13.1-9.3,11.2-20.8,11.2H84c-11.5,0-20.8-10.6-20.8-23.7V275.2c0-13.1,9.3-23.7,17-23.7h530.6c15.2,0,24.5,10.6,24.5,23.7v180.3l297.2-221.8c0.4-0.3,1-0.6,1.9-0.6c1,0,1.8,0.4,2.3,0.7V766.3z"/>
-					</svg>		
-					<p>Camera 4</p>
-		        </a>
-		      </li>
-		      <li>
-		        <a id="Camera5" class="btn object">
-					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
-						<path d="M934.5,179.9c-12.2,0-23.9,3.9-33.7,11.2L688.6,349.4V243.1c0-27-19.7-48.9-43.9-48.9H53.9C29.7,194.1,10,216,10,243.1V757c0,27,19.7,48.9,43.9,48.9h590.8c24.2,0,43.9-21.9,43.9-48.9V650.6l212.2,158.3c9.8,7.3,21.5,11.2,33.7,11.2c30.6,0,55.5-24,55.5-53.4V233.3C990,203.8,965.1,179.9,934.5,179.9z M936.8,766.3c-0.4,0.3-1.3,0.7-2.3,0.7c-0.9,0-1.5-0.3-1.9-0.6L635.4,544.5v177.2l0,12.6c0,13.1-9.3,11.2-20.8,11.2H84c-11.5,0-20.8-10.6-20.8-23.7V275.2c0-13.1,9.3-23.7,17-23.7h530.6c15.2,0,24.5,10.6,24.5,23.7v180.3l297.2-221.8c0.4-0.3,1-0.6,1.9-0.6c1,0,1.8,0.4,2.3,0.7V766.3z"/>
-					</svg>
-					<p>Camera 5</p>
-		        </a>
-		      </li>
-		    </ul>
+		    <ul id="stopRaf">
+		      <li><a onClick="pause()" class="btn"><button><p>Stop RAF</p></button></a></li>
+		    </ul>	
+
+		    <ul id="closeJoystick">
+		      <li><a class="btn"><button><p>Close Joystick</p></button></a></li>
+		    </ul>	
+
 		  </nav>
 		</div>				
 	</body>
-	<script src="js/3DSoccer.js"></script>
-	<script src="js/Camera.js"></script>
-	<script src="js/VirtualJoystick.js"></script>
+	<script src="js/Scene3D.js"></script>
+	<script src="js/VirtualInput.js"></script>
+	<script src="js/camera.js"></script>
+
+	<script>
+		
+		document.querySelector('#closeJoystick').addEventListener('click', function() {
+			if (document.querySelector(".virtualInput-joystick").style.visibility == "hidden") {
+				document.querySelectorAll(".virtualInput-joystick")[0].style.visibility = "visible";
+				document.querySelectorAll(".virtualInput-joystick")[1].style.visibility = "visible";
+				document.querySelectorAll(".virtualInput-button")[0].style.visibility = "visible";
+				document.querySelectorAll(".virtualInput-button")[1].style.visibility = "visible";
+			} else {
+				document.querySelectorAll(".virtualInput-joystick")[0].style.visibility = "hidden";
+				document.querySelectorAll(".virtualInput-joystick")[1].style.visibility = "hidden";	
+				document.querySelectorAll(".virtualInput-button")[0].style.visibility = "hidden";
+				document.querySelectorAll(".virtualInput-button")[1].style.visibility = "hidden";
+			};
+		});
+
+		document.querySelector('.nav-toggle').addEventListener( "click", function( e ){
+			e.currentTarget.classList.toggle('open');
+			document.querySelector('.menu-container').classList.toggle('nav-open');
+		});
+
+		// resize
+		window.addEventListener( 'resize', function () {
+			soccer3D.camera.aspect = window.innerWidth / window.innerHeight;
+			soccer3D.camera.updateProjectionMatrix();
+			soccer3D.renderer.setSize( window.innerWidth, window.innerHeight );
+		}, false);
+
+	</script>
+
 </html>

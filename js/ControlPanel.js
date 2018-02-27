@@ -1,10 +1,3 @@
-// resize
-window.addEventListener( 'resize', function () {
-	soccer3D.camera.aspect = window.innerWidth / window.innerHeight;
-	soccer3D.camera.updateProjectionMatrix();
-	soccer3D.renderer.setSize( window.innerWidth, window.innerHeight );
-}, false);
-
 // Controls
 let crossFadeControls = [];
 let idleAction, walkAction, runAction;

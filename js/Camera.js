@@ -1,8 +1,154 @@
-//////////////////////////////////////
-// Easing Functions
-// only considering the t value for the range [0, 1] => [0, 1]
-//
-var EasingFunctions = {
+'use strict';
+
+/**
+* 3D Camera 
+*/
+class Camera extends Scene3D {
+
+	constructor(){
+		super();
+		this.position = new Object();
+		this.rotation = new Object();
+		//this[mode]();
+	};
+
+	onUpdate() {
+		this.camera.position.set( this.position.x, this.position.y, this.position.z );
+		this.camera.rotation.set( this.rotation.x, this.rotation.y, this.rotation.z );
+	};
+
+	onComplete() {
+		console.log( "complete" );
+		this.followObject = true;
+	};
+
+	tween( cameraPresets, duration, ease ) {
+		this.followObject = false;
+		this.ease = ease;
+		this.duration = duration;
+		this.cameraEnd = cameraPresets;
+
+		this.cameraStart = {
+			position: new THREE.Vector3(),
+			rotation: new THREE.Vector3()
+		};
+
+		this.cameraStart.position.copy( this.camera.position );
+		this.cameraStart.rotation.copy( this.camera.rotation );
+		
+		// Animation start time
+		this.start = Date.now();
+		this.animate();
+	};
+
+	direct( cameraPresets ) {
+		this.camera.position.set( cameraPresets.position.x, cameraPresets.position.y, cameraPresets.position.z );
+		this.camera.rotation.set( cameraPresets.rotation.x, cameraPresets.rotation.y, cameraPresets.rotation.z );
+	};
+
+	lerp( min, max, amount ) {
+		return min + amount * ( max - min );
+	};
+
+	animate() {
+		let now = Date.now();
+		let t = this.duration > 0 ? ( now - this.start ) / this.duration : 1;
+		let progress = this.ease( t );
+		const scope = this;
+
+		this.position.x = this.lerp( this.cameraStart.position.x, this.cameraEnd.position.x, progress );
+		this.position.y = this.lerp( this.cameraStart.position.y, this.cameraEnd.position.y, progress );
+		this.position.z = this.lerp( this.cameraStart.position.z, this.cameraEnd.position.z, progress );
+		this.rotation.x = this.lerp( this.cameraStart.rotation.x, this.cameraEnd.rotation.x, progress );
+		this.rotation.y = this.lerp( this.cameraStart.rotation.y, this.cameraEnd.rotation.y, progress );
+		this.rotation.z = this.lerp( this.cameraStart.rotation.z, this.cameraEnd.rotation.z, progress );		
+
+		// If complete
+		if ( t >= 1 ) {
+			this.onUpdate();
+			this.onComplete();
+		} else {
+			// Run update callback and loop until finished
+			this.onUpdate();
+			requestAnimationFrame( function() { scope.animate(); } );
+		};
+
+	};
+
+};
+
+/////////////////////////
+// 3D Camera preset
+let cameraPresets = [
+  {
+    position: { x: -296.8590458155036, y: 223.5054451015108, z: 346.8805523319147 },
+    rotation: { x: -0.5725920499272357, y: -0.6232494536532424, z: -0.35987178331501773 }
+  },
+  {
+    position: { x: 0, y: 100, z: 0 },
+    rotation: { x: -Math.PI / 2, y: 0, z: 0 }
+  },
+  {
+    position: { x: 495.937923945333, y: -75.39736997065991, z: 113.5728047255002 },
+    rotation: { x: 0.06647368377615936, y: 1.345513565303963, z: -0.06479871684945059 }
+  },
+  {
+    position: { x: 0, y: 0, z: 508 },
+    rotation: { x: 0, y: 0, z: 0 }
+  },
+  {
+    position: { x: 122, y: 40, z: 108 },
+    rotation: { x: -0.2725920499272357, y: -0.1232494536532424, z: -0.05987178331501773 }
+  }  
+];
+
+let heavenPreset = {
+	position: {	x: -340.39172412110474,	y: 210.1353999906835, z: 403.68047358695467	},
+	rotation: {	x: -0.4799512237452751,	y: -0.6421887695903379,	z: -0.3022310914885656 }
+};
+
+let hellPreset = {
+	position: {	x: 84.14507216747498, y: 56.819398648365755, z: 94.01286879037296 },
+	rotation: { x: -0.5436330948854619,	y: 0.6536657347543198, z: 0.35219959109808424 }
+};
+
+
+let presetButton = document.getElementsByClassName( "preset-button" );
+
+let soccer3D = new Camera();
+
+presetButton[0].addEventListener( "click", function() {
+  soccer3D.tween( cameraPresets[0], 1000, Easing.easeOutCubic );
+}, false );
+
+presetButton[1].addEventListener( "click", function() {
+  soccer3D.tween( cameraPresets[1], 1000, Easing.easeOutCubic );
+}, false );
+ 
+presetButton[2].addEventListener( "click", function() {
+  soccer3D.tween( cameraPresets[2], 1000, Easing.easeOutCubic );
+}, false );
+
+presetButton[3].addEventListener( "click", function() {
+  soccer3D.tween( cameraPresets[3], 1000, Easing.easeOutCubic );
+}, false );
+
+presetButton[4].addEventListener( "click", function() {
+  soccer3D.direct( hellPreset );
+}, false );
+
+presetButton[5].addEventListener( "click", function() {
+  soccer3D.tween( cameraPresets[4], 1000, Easing.easeOutCubic );
+}, false );
+
+presetButton[6].addEventListener( "click", function() {
+  soccer3D.followObject = soccer3D.followObject == true ? false : true;
+}, false );
+/*
+* Easing Functions
+* only considering the t value for the range [0, 1] => [0, 1]
+*/
+var Easing = {
 	// no easing, no acceleration
 	linear: function linear(t) {
 		return t;
@@ -68,233 +214,3 @@ var EasingFunctions = {
 		return (t -= .5) < 0 ? (.01 + .01 / t) * Math.sin(50 * t) : (.02 - .01 / t) * Math.sin(50 * t) + 1;
 	}
 };
-
-/**
-* Tween
-*/
-function tween( values, options ) {
-	// Methods & Properties
-	var onComplete = options.onComplete;
-	var onUpdate = options.onUpdate;
-	var ease = options.ease;
-	var duration = values.duration;
-	
-	// Animation start time
-	var start = Date.now();
-	
-	//Properties
-	if( values.action == "camera3D" ){
-		
-		var fromPositionX = values.cameraStart.position.x;
-		var toPositionX = values.position.x;
-		var fromPositionY = values.cameraStart.position.y;
-		var toPositionY = values.position.y;
-		var fromPositionZ = values.cameraStart.position.z;
-		var toPositionZ = values.position.z;
-
-		var fromRotationX = values.cameraStart.rotation.x;
-		var toRotationX = values.rotation.x;
-		var fromRotationnY = values.cameraStart.rotation.y;
-		var toRotationY = values.rotation.y;
-		var fromRotationZ = values.cameraStart.rotation.z;
-		var toRotationZ = values.rotation.z;
-		
-	} else {
-
-		var fromX = values.from.x;
-		var toX = values.to.x;
-		var fromY = values.from.y;
-		var toY = values.to.y;
-
-	};
-	
-	Math.lerp = function( min, max, amount ) {
-		return min + amount * ( max - min );
-	};
-	
-	// Create & run animation function
-	var animation = function animation() {
-		var now = Date.now();
-		var t = duration > 0 ? ( now - start ) / duration : 1;
-		var progress = ease( t );
-
-		if( values.action == "camera3D" ){
-
-			values.position.x = Math.lerp( values.cameraStart.position.x, values.cameraEnd.position.x / 20, progress );
-			values.position.y = Math.lerp( values.cameraStart.position.y, values.cameraEnd.position.y / 20, progress );
-			values.position.z = Math.lerp( values.cameraStart.position.z, values.cameraEnd.position.z / 20, progress );
-			values.rotation.x = Math.lerp( values.cameraStart.rotation.x, values.cameraEnd.rotation.x, progress );
-			values.rotation.y = Math.lerp( values.cameraStart.rotation.y, values.cameraEnd.rotation.y, progress );
-			values.rotation.z = Math.lerp( values.cameraStart.rotation.z, values.cameraEnd.rotation.z, progress );		
-		
-		} else {
-			
-			values.progress.x = fromX + progress * (toX - fromX); //linear interpolation
-			values.progress.y = fromY + progress * (toY - fromY); //linear interpolation
-			
-		};
-		
-		// If complete
-		if ( t >= 1 ) {
-			onUpdate( values );
-			onComplete( values );
-			return values;
-		} else {
-			// Run update callback and loop until finished
-			onUpdate( values );
-			requestAnimationFrame( animation );
-		};
-	};
-	animation();
-};
-
-document.querySelector('#clearBtn').addEventListener('click', function() {
-	if (document.querySelector(".virtualInput-joystick").style.visibility == "hidden") {
-		document.querySelectorAll(".virtualInput-joystick")[0].style.visibility = "visible";
-		document.querySelectorAll(".virtualInput-joystick")[1].style.visibility = "visible";
-		document.querySelectorAll(".virtualInput-button")[0].style.visibility = "visible";
-		document.querySelectorAll(".virtualInput-button")[1].style.visibility = "visible";
-	} else {
-		document.querySelectorAll(".virtualInput-joystick")[0].style.visibility = "hidden";
-		document.querySelectorAll(".virtualInput-joystick")[1].style.visibility = "hidden";	
-		document.querySelectorAll(".virtualInput-button")[0].style.visibility = "hidden";
-		document.querySelectorAll(".virtualInput-button")[1].style.visibility = "hidden";
-	};
-});
-
-/////////////////////////
-// 3D + Camera preset
-var EMPTY = {};
-
-var cameraPresets = [
-  {
-    position: {
-      x: -2965.8590458155036,
-      y: 2235.5054451015108,
-      z: 3467.8805523319147
-    },
-    rotation: {
-      x: -0.5725920499272357,
-      y: -0.6232494536532424,
-      z: -0.35987178331501773
-    }
-  },
-  {
-    position: {
-      x: 0,
-      y: 1e4,
-      z: 0
-    },
-    rotation: {
-      x: -Math.PI / 2,
-      y: 0,
-      z: 0
-    }
-  },
-  {
-    position: {
-      x: 4952.937923945333,
-      y: -75.39736997065991,
-      z: 1132.5728047255002
-    },
-    rotation: {
-      x: 0.06647368377615936,
-      y: 1.345513565303963,
-      z: -0.06479871684945059
-    }
-  },
-  {
-    position: {
-      x: 0,
-      y: 0,
-      z: 5080
-    },
-    rotation: {
-      x: 0,
-      y: 0,
-      z: 0
-    }
-  }
-];
-
-var heavenPreset = {
-  position: {
-    x: -340.39172412110474,
-    y: 210.1353999906835,
-    z: 403.68047358695467
-  },
-  rotation: {
-    x: -0.4799512237452751,
-    y: -0.6421887695903379,
-    z: -0.3022310914885656
-  }
-};
-
-var cameraTarget;
-//tween camera
-var cameraPosition = {
-  tweenCamera: function( cameraPresets ) {
-		var preset = {};
-		preset.duration = 1000;
-		preset.cameraStart = {
-			position: new THREE.Vector3(),
-			rotation: new THREE.Vector3(),
-			fov: 0
-		};
-
-	    preset.cameraStart.position.copy( soccer3D.camera.position );
-    	preset.cameraStart.rotation.copy( soccer3D.camera.rotation );
-		preset.cameraStart.fov = soccer3D.camera.fov;
-		preset.action = "camera3D";
-		preset.cameraEnd = cameraPresets;
-		
-		preset.position = {
-			x: 0,				
-			y: 0,
-			z: 0
-		};
-		
-		preset.rotation = {
-			x: 0,
-			y: 0,
-			z: 0
-		};
-		
-		tween( preset, {
-			onUpdate: function onUpdate( values ) {
-        		soccer3D.camera.position.x = values.position.x;				
-        		soccer3D.camera.position.y = values.position.y;
-				soccer3D.camera.position.z = values.position.z;
-				soccer3D.camera.rotation.x = values.rotation.x;
-				soccer3D.camera.rotation.y = values.rotation.y;
-				soccer3D.camera.rotation.z = values.rotation.z;						
-			},
-			onComplete: function onComplete() {
-				console.log("complete");
-			},
-			ease: EasingFunctions.easeOutCubic
-		});
-	},
-
-	applyCamera: function( preset ) {
-		soccer3D.camera.position.copy( preset.position );
-		soccer3D.camera.lookAt( new THREE.Vector3( 0,0,0 ) );
-	}
-};
-
-let presetButton = document.getElementById("camera-presets").getElementsByTagName("li");
-presetButton[0].addEventListener( "click", function() {
-  cameraPosition.tweenCamera( cameraPresets[0] );
-}, false );
-presetButton[1].addEventListener( "click", function() {
-  cameraPosition.tweenCamera( cameraPresets[1] );
-}, false );
-presetButton[2].addEventListener( "click", function() {
-  cameraPosition.tweenCamera( cameraPresets[2] );
-}, false );
-presetButton[3].addEventListener( "click", function() {
-  cameraPosition.tweenCamera( cameraPresets[3] );
-}, false );
-presetButton[4].addEventListener( "click", function() {
-  cameraPosition.applyCamera( heavenPreset );
-}, false );

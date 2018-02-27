@@ -1,30 +1,42 @@
-document.querySelector('.nav-toggle').addEventListener( "click", function( e ){
-	e.currentTarget.classList.toggle('open');
-	document.querySelector('.menu-container').classList.toggle('nav-open');
-});
-
-//toggle button styles
-document.querySelector('.toggle').addEventListener( "click", function( e ){
-	document.querySelector('.selected').classList.remove('selected');
-	e.currentTarget.classList.add('selected');
-});
-
-let rotate = 0;
-let cameraStart = 0;
-let quadrant = 0;
-
-// https://github.com/mrdoob/eventdispatcher.js/
-/**
-* @author mrdoob / http://mrdoob.com/
+/*
+* EventDispatcher
 */
+
 class EventDispatcher{
 
 	constructor(){};
 
-	addEventListener( type, listener ) {
-		if ( this._listeners === undefined ) this._listeners = {};
+	addListenerMulti( el, a, fn, scope ) {
+
+		//bind(this) will change the signature. 
+		//Always assign the function to a var after binding this to using function bind API so 
+		//that same var can be used in removeListener
+		//https://stackoverflow.com/questions/10444077/javascript-removeeventlistener-not-working
+
+		if ( scope !== undefined ){
+			var fnStatic = fn.bind( scope ); 
+		} else {
+			var fnStatic = fn;
+		};
+
+		a.forEach( function( ev ) {
+			el.addEventListener( ev, fnStatic, false );
+		} );
 		
-		let listeners = this._listeners;
+		return fnStatic;
+	};
+
+	removeListenerMulti( el, a, fn ) {
+
+		a.forEach( function( ev ) {
+			el.removeEventListener( ev, fn, false );
+		} );
+	};
+
+	addEventListener( type, listener ) {
+		if ( this.listeners === undefined ) this.listeners = {};
+		
+		let listeners = this.listeners;
 		
 		if ( listeners[type] === undefined ) {
 			listeners[type] = [];
@@ -37,8 +49,8 @@ class EventDispatcher{
 
 	hasEventListener( type, listener ) {
 		
-		if ( this._listeners === undefined ) return false;
-			let listeners = this._listeners;
+		if ( this.listeners === undefined ) return false;
+			let listeners = this.listeners;
 		
 		if ( listeners[ type ] !== undefined &&
 			listeners[ type ].indexOf( listener ) !== -1 ) {
@@ -49,9 +61,9 @@ class EventDispatcher{
 
 	removeEventListener( type, listener ) {
 		
-		if ( this._listeners === undefined ) return;
+		if ( this.listeners === undefined ) return;
 		
-		var listeners = this._listeners;
+		var listeners = this.listeners;
 		var listenerArray = listeners[type];
 		
 		if ( listenerArray !== undefined ) {
@@ -63,8 +75,8 @@ class EventDispatcher{
 	};
 
 	dispatchEvent( event ) {
-		if ( this._listeners === undefined ) return;
-		let listeners = this._listeners;
+		if ( this.listeners === undefined ) return;
+		let listeners = this.listeners;
 		let listenerArray = listeners[event.type];
 
 		if ( listenerArray !== undefined ) {
@@ -82,10 +94,11 @@ class EventDispatcher{
 	};
 };
 
-//Joystick
+/*
+* Joystick
+*/
 class Joystick extends EventDispatcher {
 
-	//Joystick
 	constructor( container, size, params ) {
 
 		super();
@@ -120,16 +133,13 @@ class Joystick extends EventDispatcher {
 
 		container.insertAdjacentHTML( "beforeend", template );
 
-		this.ns = {};
-		this.ns._start = ["pointerdown", "MSPointerDown", "touchstart", "mousedown"];
-		this.ns._move = ["pointermove", "MSPointerMove", "touchmove", "mousemove"];
-		this.ns._end = ["pointerup", "MSPointerUp", "touchend", "mouseup"];
+		this.start = ["pointerdown", "MSPointerDown", "touchstart", "mousedown"];
+		this.move = ["pointermove", "MSPointerMove", "touchmove", "mousemove"];
+		this.end = ["pointerup", "MSPointerUp", "touchend", "mouseup"];
 
 		this.all = document.getElementById( id );
 		this.all.style.width = this.width + "px";
 		this.all.style.height = this.width + "px";
-
-		addListenerMulti( this.all, this.ns._start, this.onbuttondown, this );
 
 		window.addEventListener( "resize", function() {
 				this.offset.left = this.all.offsetLeft;
@@ -139,6 +149,8 @@ class Joystick extends EventDispatcher {
 		this.button = this.all.querySelector( ".virtualInput-joystick__button" );
 		this.button.style.width = size * 0.6 + "px";
 		this.button.style.height = size * 0.6 + "px";
+
+		this.addListenerMulti( this.button, this.start, this.onbuttondown, this );
 
 		this.offset = {};
 		this.offset.left = this.all.offsetLeft;
@@ -172,8 +184,8 @@ class Joystick extends EventDispatcher {
 		this.setPosition( coordinate.x, coordinate.y );
 		this.dispatchEvent( { type: "move" } );
 
-		this.staticonbuttonmove = addListenerMulti( document.body, this.ns._move, this.onbuttonmove, this );
-		this.staticonbuttonup = addListenerMulti( document.body, this.ns._end, this.onbuttonup, this );
+		this.staticonbuttonmove = this.addListenerMulti( document.body, this.move, this.onbuttonmove, this );
+		this.staticonbuttonup = this.addListenerMulti( document.body, this.end, this.onbuttonup, this );
 	};
 
 	onbuttonmove( event ) {
@@ -208,10 +220,9 @@ class Joystick extends EventDispatcher {
 		this.dispatchEvent( { type: "disactive" } );
 		this.isActive = false;
 		this.setPosition( 0, 0 );
-		quadrant = 0;
 
-		removeListenerMulti( document.body, this.ns._move, this.staticonbuttonmove );
-		removeListenerMulti( document.body, this.ns._end, this.staticonbuttonup );
+		this.removeListenerMulti( document.body, this.move, this.staticonbuttonmove );
+		this.removeListenerMulti( document.body, this.end, this.staticonbuttonup );
 	};
 
 
@@ -253,24 +264,25 @@ class Joystick extends EventDispatcher {
 
 	// geometry
 	getEventCoordinate( event ) {
-		var x, y, i, _event = null, l;
+		var x, y, i, l; 
+		this.event = null;
 
 		if ( event.changedTouches ) {
 			for ( ( i = 0 ), ( l = event.changedTouches.length ); i < l; i++ ) {
 				if ( this.pointerId === event.changedTouches[i].identifier ) {
-					_event = event.changedTouches[i];
+					this.event = event.changedTouches[i];
 				};
 			};
 		} else {
-			_event = event;
+			this.event = event;
 		};
 
-		if ( _event === null ) {
+		if ( this.event === null ) {
 			return false;
 		};
 
-		x = ( _event.clientX - this.offset.left - this.halfWidth ) / this.halfWidth * 2;
-		y = ( -( _event.clientY - this.offset.top) + this.halfWidth ) / this.halfWidth * 2;
+		x = ( this.event.clientX - this.offset.left - this.halfWidth ) / this.halfWidth * 2;
+		y = ( -( this.event.clientY - this.offset.top) + this.halfWidth ) / this.halfWidth * 2;
 
 		return { x: x, y: y };
 	};
@@ -299,12 +311,15 @@ class Joystick extends EventDispatcher {
 
 };
 
+/*
+*	Button
+*/
+
 class Button extends EventDispatcher {
 
 	constructor( container, size, params ) {
 
 		super();
-		var ns = {};
 		var scope = this;
 		var id = params && params.id ? params.id : "";
 		var label = params.label;
@@ -314,136 +329,65 @@ class Button extends EventDispatcher {
 			label,
 			"</div>",
 			"</div>"
-		].join("");
+		].join( "" );
 
 		container.insertAdjacentHTML( "beforeend", template );
+
 		var button = document.getElementById( id );
 		button.style.width = size + "px";
 		button.style.height = size + "px";
 
-		ns._start = ["pointerdown", "MSPointerDown", "touchstart", "click"];
+		let start = ["pointerdown", "MSPointerDown", "touchstart", "click"];
+		let move = ["pointermove", "MSPointerMove", "touchmove", "mousemove"];
 		var fn = function() {
 			scope.dispatchEvent( { type: "press" } );
 		};
-		addListenerMulti( button, ns._start, fn, undefined );
+		this.addListenerMulti( button, start, fn, undefined );
+		this.addListenerMulti( button, move, function( event ){
+			event.preventDefault();
+			event.stopPropagation();
+		}, undefined );
 
 	};
 
 };
 
+/*
+*  square button
+*/
+class SquareButton extends EventDispatcher{
 
-function addListenerMulti( el, a, fn, scope ) {
-	if ( scope !== undefined ){
-		var fnStatic = fn.bind( scope ); 
-	} else {
-		var fnStatic = fn;
-	};
+	constructor( container, size, params ) {
 
-	a.forEach( function( ev ) {
-		el.addEventListener( ev, fnStatic, false );
-	} );
-	
-	return fnStatic;
-};
+		super();
+		var scope = this;
+		var id = params && params.id ? params.id : "";
+		var label = params.label;
+		var template = [
+			'<div class="virtualInput-squareButton" id="' + id + '">',
+			'<div class="virtualInput-squareButton__inner">',
+			label,
+			'</div>',
+			'</div>'
+		].join( "" );
 
-function  removeListenerMulti( el, a, fn ) {
-	a.forEach( function( ev ) {
-		el.removeEventListener( ev, fn, false );
-	} );
-};
+		container.insertAdjacentHTML( "beforeend", template );
+		
+		var button = document.getElementById( id );
+		button.style.width = size + "px";
+		button.style.height = size + "px";
 
-//Create obj
-var joystick1 = new Joystick( document.body, 120, {
-	id: "joystick1"
-} );
+		let start = ["pointerdown", "MSPointerDown", "touchstart", "click"];
+		let move = ["pointermove", "MSPointerMove", "touchmove", "mousemove"];
+		var fn = function() {
+			scope.dispatchEvent( { type: "press" } );
+		};
+		this.addListenerMulti( button, start, fn, undefined );
+		this.addListenerMulti( button, move, function( event ){
+			event.preventDefault();
+			event.stopPropagation();
+		}, undefined );
 
-var joystick2 = new Joystick( document.body, 120, {
-	id: "joystick2"
-} );
-
-var button1 = new Button( document.body, 70, {
-	id: "button1",
-	label: "button1"
-} );
-
-var button2 = new Button( document.body, 70, {
-	id: "button2",
-	label: "button2"
-} );
-
-var button3 = new Button( document.body, 70, {
-	id: "button3",
-	label: "button3"
-});
-
-
-function degToRad( deg ) {
-	return deg * Math.PI / 180;
-};
-
-function updateView(){
-	var currentDirX = "", currentDirY = "";
-	if ( quadrant === 0 ) return;
-	if ( quadrant > 4.750 || quadrant <= 1.250 ) { currentDirX = "right"; currentDirY = "";	}			
-	if ( quadrant > 1.250 && quadrant <= 1.750 ) { currentDirX = "right"; currentDirY = "up"; }	
-	if ( quadrant > 1.750 && quadrant <= 2.250 ) { currentDirX = ""; currentDirY = "up";	}
-	if ( quadrant > 2.250 && quadrant <= 2.750 ) { currentDirX = "left"; currentDirY = "up";	}	
-	if ( quadrant > 2.750 && quadrant <= 3.250 ) { currentDirX = "left"; currentDirY = "";	}	
-	if ( quadrant > 3.250 && quadrant <= 3.750 ) { currentDirX = "left"; currentDirY = "down"; }	
-	if ( quadrant > 3.750 && quadrant <= 4.250 ) { currentDirX = ""; currentDirY = "down"; }
-	if ( quadrant > 4.250 && quadrant <= 4.750 ) { currentDirX = "right"; currentDirY = "down"; }
-
-	if ( currentDirX === "left" ) {
-		cameraStart = cameraStart - 4;
-		soccer3D.camera.position.setZ(cameraStart);
-	//pointLight.position.setZ(cameraStart);
-	} else if ( currentDirX === "right" ) {
-		cameraStart += 4;
-		soccer3D.camera.position.setZ(cameraStart);
-	};
-
-	if ( currentDirY === "up" ) {
-		rotate -= 0.04;
-		soccer3D.scene.rotation.y = rotate;
-	//pointLight.rotation.y = rotate;
-	} else if ( currentDirY === "down" ) {
-		rotate += 0.04;
-		soccer3D.scene.rotation.y = rotate;
 	};
 
 };
-
-//radToDeg
-function radToDeg( rad ) {
-	var angle = rad * 180 / Math.PI;
-	angle %= 360.0; // [0..360) if angle is positive, (-360..0] if negative
-	if ( angle < 0 ) { 
-		angle += 360.0; // Back to [0..360)
-	};
-	quadrant = ( angle/90 ) % 4 + 1; // Quadrant
-	return angle;
-};
-
-joystick1.addEventListener( "move", function() {
-	var rad = this.getAngle();
-	updateView();
-	radToDeg( rad );
-});
-
-joystick2.addEventListener( "move", function() {
-	var rad = this.getAngle();
-	updateView();
-	radToDeg(rad);
-});
-
-button1.addEventListener( "press", function() {
-	console.log("button1");
-});
-
-button2.addEventListener( "press", function() {
-	console.log("button2");
-});
-
-button3.addEventListener( "press", function() {
-	console.log("button3");
-});
