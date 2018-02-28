@@ -105,7 +105,6 @@
   display: table-cell;
   vertical-align: middle;
   background: rgba( 255, 255, 255, .5 );
-  border: 1px solid #333;
   border-radius: 50%;
 }
 
@@ -126,7 +125,6 @@
   cursor: pointer;
   display: table-cell;
   vertical-align: middle;
-  border: 1px solid #333;
   border-radius: 3px;
   background: rgba( 255, 255, 255, .5 );
 }
