@@ -79,14 +79,19 @@ class Scene3D{
 			scope.addPlayer();
 		});
 
-		// Create Pitch			
-		new THREE.JSONLoader().load( "models/pitch/Pitch.js", function( geometry, materials ) {
-				
-			materials[0].side = THREE.DoubleSide;					
-			var ground =  new THREE.Mesh( geometry, materials[0] );
-			ground.scale.set( 20, 20, 20 );
-			ground.receiveShadow = true;
-			scope.scene.add( ground );
+		//Soccer Pitch
+		new THREE.ObjectLoader().load( "models/pitch/stadium.json", function( object ) {
+			
+			// Pitch Base look in the plus			
+			//materials[0].side = THREE.DoubleSide;					
+			//var ground =  new THREE.Mesh( geometry, materials[0] );
+			//ground.scale.set( 20, 20, 20 );
+			//ground.receiveShadow = true;
+			//scope.scene.add( ground );
+
+			object.position.set( 0, -25, 0 );
+			object.scale.set( 640, 640, 640 );
+			scope.scene.add( object );
 
 		});
 
