@@ -80,9 +80,6 @@ body {
   padding: 5px;
 }
 
-a {
-  color: #bbb;
-}
 
 .ac {  /* prevent dat-gui from being selected */
   -webkit-user-select: none;
@@ -108,8 +105,16 @@ a {
   stroke-miterlimit: 10;
 }
 
+/* 
+ * Side Menu 
+ */
+
 li {
   list-style-type: none;
+}
+
+a {
+  color: #bbb;
 }
 
 a:hover {

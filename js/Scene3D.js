@@ -76,7 +76,10 @@ class Scene3D{
 				return;
 			};
 
-			scope.addPlayer();
+			//for ( let i = 0; i < 22; i++){ 
+				scope.addPlayer();
+			//};
+
 		});
 
 		//Soccer Pitch
